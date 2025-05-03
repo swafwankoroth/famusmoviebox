@@ -1,75 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Famu's Movie Ticket</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #333;
-    }
-
-    .ticket {
-      background: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .ticket h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 2.5rem;
-      color: #ff6f91;
-      font-weight: 600;
-    }
-
-    .ticket p {
-      margin-bottom: 20px;
-      font-size: 1.2em;
-      color: #555;
-    }
-
-    .buyButton {
-      padding: 12px 24px;
-      background-color: #ff6f91;
-      color: white;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .buyButton:hover {
-      background-color: #ff3e6c;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket - Famu's Box</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+        
+        #video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        
+        .ticket-container {
+            position: relative;
+            width: 85%;
+            max-width: 600px;
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .ticket-header {
+            background: linear-gradient(135deg, #ff6b6b, #c44569);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .ticket-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.2) 10px,
+                rgba(0, 0, 0, 0.3) 10px,
+                rgba(0, 0, 0, 0.3) 20px
+            );
+        }
+        
+        .ticket-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ticket-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .ticket-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .ticket-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .info-item {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0.5rem 0;
+        }
+        
+        .ticket-footer {
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+        
+        .buy-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #c44569);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(196, 69, 105, 0.4);
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(196, 69, 105, 0.5);
+        }
+        
+        .buy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+        }
+        
+        .back-icon {
+            margin-right: 0.5rem;
+        }
+        
+        .ticket-barcode {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .barcode-img {
+            max-width: 80%;
+            opacity: 0.8;
+        }
+        
+        /* Special ticket effects */
+        .ticket-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .ticket-container {
+                width: 95%;
+            }
+            
+            .ticket-title {
+                font-size: 1.7rem;
+            }
+            
+            .ticket-body {
+                padding: 1.5rem;
+            }
+            
+            .info-item {
+                min-width: 100px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-  <div class="ticket">
-    <h1>Famu's Movie Box</h1>
-    <p>Congratulations! You're one step away from unlocking the best movie collection.</p>
-    <a href="https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing" target="_blank" class="buyButton">Buy Now</a>
-  </div>
-
+    <video id="video-background" autoplay muted loop>
+        <source src="https://drive.google.com/uc?export=download&id=13koYqimDGZDmZt3-lq9XIqovzzRmjzXF" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <div class="overlay"></div>
+    
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left back-icon"></i> Back
+    </a>
+    
+    <div class="ticket-container">
+        <div class="ticket-shimmer"></div>
+        
+        <div class="ticket-header">
+            <h1 class="ticket-title">Special Movie Night</h1>
+            <p class="ticket-subtitle">A perfect evening just for you</p>
+        </div>
+        
+        <div class="ticket-body">
+            <div class="ticket-info">
+                <div class="info-item">
+                    <div class="info-label">Date</div>
+                    <div class="info-value">Today</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Time</div>
+                    <div class="info-value">Any time</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Seat</div>
+                    <div class="info-value">VIP</div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div>
+                <div class="info-label">Special Note</div>
+                <div class="info-value">Get comfy and enjoy our special movie night together ♥</div>
+            </div>
+            
+            <div class="ticket-barcode">
+                <img src="/api/placeholder/400/70" alt="Barcode" class="barcode-img">
+            </div>
+        </div>
+        
+        <div class="ticket-footer">
+            <button id="buy-button" class="buy-btn">
+                <i class="fas fa-ticket-alt"></i> Buy Now
+            </button>
+        </div>
+    </div>
+    
+    <audio id="background-music" loop>
+        <source src="https://drive.google.com/uc?export=download&id=1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Play background music when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.volume = 0.5; // Set volume to 50%
+            backgroundMusic.play().catch(e => {
+                console.log('Auto-play was prevented. Click anywhere to play music.');
+                document.body.addEventListener('click', () => {
+                    backgroundMusic.play();
+                }, { once: true });
+            });
+        });
+        
+        // Buy button click event
+        document.getElementById('buy-button').addEventListener('click', function() {
+            // Your Google Drive link 
+            const googleDriveLink = "https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing";
+            
+            // Button animation
+            this.innerHTML = '<i class="fas fa-check"></i> Enjoy!';
+            this.style.background = 'linear-gradient(135deg, #20bf6b, #0b8a5c)';
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = googleDriveLink;
+            }, 1000);
+        });
+        
+        // Use real video if you have one
+        // For now, this is a placeholder where you would put your real video URL
+        const videoBackground = document.getElementById('video-background');
+        
+        // Handle video loading errors gracefully
+        videoBackground.addEventListener('error', function() {
+            document.body.style.backgroundColor = '#1a1a2e';
+        });
+    </script>
 </body>
 </html>
