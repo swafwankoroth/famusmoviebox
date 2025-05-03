@@ -94,32 +94,43 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: url('https://drive.google.com/uc?export=view&id=13koYqimDGZDmZt3-lq9XIqovzzRmjzXF
-') no-repeat center center fixed;
-      background-size: cover;
-      filter: brightness(60%);
+      background: #000;
       z-index: -1;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="background"></div>
+  <!-- Background Video Embed using iframe -->
+  <iframe src="https://drive.google.com/file/d/13koYqimDGZDmZt3-lq9XIqovzzRmjzXF/preview" allow="autoplay"></iframe>
+
   <div class="main-container">
     <h1>Hi Baby, <br> Welcome to Famu's ____ Box</h1>
 
     <div id="boxOptions">
       <div class="option" id="movieBox">Movie</div>
-      <!-- Add more options here, like Music, Books, etc. -->
     </div>
 
     <div id="finalTitle">
       Famu's Movie Box
     </div>
 
-    <a id="buyButton" href="ticket.html">Buy Famu's Movie Box</a>
+    <a id="buyButton" href="https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing" target="_blank">Buy Famu's Movie Box</a>
 
-    <audio id="bgMusic" src="https://drive.google.com/uc?export=view&id=YOUR_FILE_ID" preload="auto"></audio>
+    <!-- Background Music -->
+    <audio id="bgMusic" preload="auto" loop>
+      <source src="https://drive.google.com/uc?export=view&id=1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
   </div>
 
   <script>
@@ -130,11 +141,11 @@
     const boxOptions = document.getElementById('boxOptions');
 
     movieBox.addEventListener('click', () => {
-      bgMusic.play();
-      boxOptions.style.display = 'none';
+      bgMusic.play(); // Play the background music
+      boxOptions.style.display = 'none'; // Hide the box options
       setTimeout(() => {
-        finalTitle.style.display = 'block';
-        buyButton.style.display = 'inline-block';
+        finalTitle.style.display = 'block'; // Show the title
+        buyButton.style.display = 'inline-block'; // Show the "Buy" button
       }, 1500);
     });
   </script>
