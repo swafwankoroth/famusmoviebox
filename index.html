@@ -1,165 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Famu's ____ Box</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
-      overflow: hidden;
-      color: #333;
-      position: relative;
-    }
-
-    h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 4rem;
-      font-weight: 600;
-      color: #111;
-      text-align: center;
-      margin-bottom: 50px;
-      z-index: 10;
-    }
-
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      z-index: 10;
-    }
-
-    #boxOptions {
-      display: flex;
-      gap: 30px;
-      margin-top: 20px;
-      z-index: 10;
-    }
-
-    .option {
-      padding: 20px 40px;
-      background-color: #ff6f91;
-      color: white;
-      font-size: 1.2em;
-      font-weight: 500;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: transform 0.3s ease-in-out;
-      text-transform: uppercase;
-    }
-
-    .option:hover {
-      background-color: #ff3e6c;
-      transform: scale(1.1);
-    }
-
-    #finalTitle {
-      font-size: 2.5rem;
-      font-weight: 600;
-      color: #ff6f91;
-      display: none;
-      margin-top: 40px;
-    }
-
-    #buyButton {
-      padding: 12px 24px;
-      background-color: #ff6f91;
-      color: white;
-      font-size: 1.2em;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      margin-top: 20px;
-      display: none;
-      transition: background-color 0.3s ease;
-    }
-
-    #buyButton:hover {
-      background-color: #ff3e6c;
-    }
-
-    .background-video-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    video.background-video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      pointer-events: none;
-      opacity: 0.6;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famu's Box</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+        
+        #video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 1.5s ease-in-out;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffcccb;
+            text-shadow: 0 0 10px rgba(255, 100, 100, 0.5);
+        }
+        
+        .welcome-text {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 3rem;
+        }
+        
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 15px;
+            width: 150px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .option:not(.active):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            border-radius: 15px;
+            z-index: -1;
+        }
+        
+        .option i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .option.active {
+            background-color: rgba(255, 120, 120, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+        }
+        
+        .option-label {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .heart {
+            color: #ff6b6b;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Icons */
+        .fa-music { color: #64b5f6; }
+        .fa-utensils { color: #81c784; }
+        .fa-film { color: #ffb74d; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.5rem;
+            }
+            
+            .options {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            
+            .option {
+                width: 80%;
+                max-width: 200px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-  <!-- Background Video -->
-  <div class="background-video-container">
-    <video class="background-video" autoplay loop muted>
-      <source src="https://drive.google.com/uc?export=download&id=13koYqimDGZDmZt3-lq9XIqovzzRmjzXF" type="video/mp4">
-      Your browser does not support the video tag.
+    <video id="video-background" autoplay muted loop>
+        <source src="/api/placeholder/400/320" type="video/mp4">
+        Your browser does not support the video tag.
     </video>
-  </div>
-
-  <div class="main-container">
-    <h1>Hi Baby, <br> Welcome to Famu's ____ Box</h1>
-
-    <div id="boxOptions">
-      <div class="option" id="movieBox">Movie</div>
+    
+    <div class="overlay"></div>
+    
+    <div class="container">
+        <h1>Hi Love <span class="heart">♥</span></h1>
+        <p class="welcome-text">Welcome to Famu's Mystery Box</p>
+        
+        <div class="options">
+            <div class="option disabled">
+                <i class="fas fa-music"></i>
+                <span class="option-label">Music</span>
+            </div>
+            
+            <div class="option disabled">
+                <i class="fas fa-utensils"></i>
+                <span class="option-label">Snack</span>
+            </div>
+            
+            <div class="option active" id="movie-option">
+                <i class="fas fa-film"></i>
+                <span class="option-label">Movie</span>
+            </div>
+        </div>
     </div>
-
-    <div id="finalTitle">
-      Famu's Movie Box
+    
+    <div class="footer">
+        Made with <span class="heart">♥</span> for you
     </div>
-
-    <a id="buyButton" href="https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing" target="_blank">Buy Famu's Movie Box</a>
-
-    <!-- Background Music -->
-    <audio id="bgMusic" preload="auto" loop>
-      <source src="https://drive.google.com/uc?export=view&id=1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW" type="audio/mp3">
-      Your browser does not support the audio element.
+    
+    <audio id="background-music" loop>
+        <source src="" type="audio/mp3">
+        Your browser does not support the audio element.
     </audio>
-  </div>
-
-  <script>
-    const movieBox = document.getElementById('movieBox');
-    const finalTitle = document.getElementById('finalTitle');
-    const buyButton = document.getElementById('buyButton');
-    const bgMusic = document.getElementById('bgMusic');
-    const boxOptions = document.getElementById('boxOptions');
-
-    movieBox.addEventListener('click', () => {
-      bgMusic.play(); // Play the background music
-      boxOptions.style.display = 'none'; // Hide the box options
-      setTimeout(() => {
-        finalTitle.style.display = 'block'; // Show the title
-        buyButton.style.display = 'inline-block'; // Show the "Buy" button
-      }, 1500);
-    });
-  </script>
-
+    
+    <script>
+        // Make only the movie option clickable
+        document.getElementById('movie-option').addEventListener('click', function() {
+            // Play background music when Movie is clicked
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.play();
+            
+            // Redirect to ticket page with animation
+            this.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                window.location.href = 'ticket.html';
+            }, 500);
+        });
+        
+        // Use real video if you have one
+        // For now, this is a placeholder where you would put your real video URL
+        const videoBackground = document.getElementById('video-background');
+        
+        // Handle video loading errors gracefully
+        videoBackground.addEventListener('error', function() {
+            document.body.style.backgroundColor = '#1a1a2e';
+        });
+    </script>
 </body>
 </html>
