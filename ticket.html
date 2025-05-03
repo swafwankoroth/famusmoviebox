@@ -21,16 +21,30 @@
             align-items: center;
             color: white;
             position: relative;
+            background-color: #0a0a14; /* Fallback color if video doesn't load */
         }
         
-        #video-background {
+        .video-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            overflow: hidden;
             z-index: -2;
+        }
+        
+        #video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -2;
+            object-fit: cover;
         }
         
         .overlay {
@@ -236,10 +250,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <video id="video-background" autoplay muted loop>
-        <source src="https://drive.google.com/uc?export=download&id=13koYqimDGZDmZt3-lq9XIqovzzRmjzXF" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video-container">
+        <video id="video-background" autoplay muted loop>
+            <source src="https://www.googleapis.com/drive/v3/files/13koYqimDGZDmZt3-lq9XIqovzzRmjzXF?alt=media&key=AIzaSyAQvtnI6bQja3zVOifer6qCdELQo3YKJ5Y" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
     
     <div class="overlay"></div>
     
@@ -293,7 +309,7 @@
     </div>
     
     <audio id="background-music" loop>
-        <source src="https://drive.google.com/uc?export=download&id=1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW" type="audio/mp3">
+        <source src="https://www.googleapis.com/drive/v3/files/1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW?alt=media&key=AIzaSyAQvtnI6bQja3zVOifer6qCdELQo3YKJ5Y" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
     
@@ -302,9 +318,12 @@
         window.addEventListener('DOMContentLoaded', function() {
             const backgroundMusic = document.getElementById('background-music');
             backgroundMusic.volume = 0.5; // Set volume to 50%
-            backgroundMusic.play().catch(e => {
-                console.log('Auto-play was prevented. Click anywhere to play music.');
-                document.body.addEventListener('click', () => {
+            
+            // Try to play music - handle autoplay restrictions
+            backgroundMusic.play().catch(function(e) {
+                console.log('Audio playback was prevented by the browser. Click anywhere to play.');
+                // Add a click event to the whole document to play on first interaction
+                document.body.addEventListener('click', function() {
                     backgroundMusic.play();
                 }, { once: true });
             });
@@ -325,13 +344,12 @@
             }, 1000);
         });
         
-        // Use real video if you have one
-        // For now, this is a placeholder where you would put your real video URL
+        // Alternative: Try loading the video from a different source if Google Drive fails
         const videoBackground = document.getElementById('video-background');
-        
-        // Handle video loading errors gracefully
         videoBackground.addEventListener('error', function() {
+            console.error('Video failed to load. Applying fallback background.');
             document.body.style.backgroundColor = '#1a1a2e';
+            // You could also set a different video source here if needed
         });
     </script>
 </body>
