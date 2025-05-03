@@ -5,37 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Famu's Movie Box</title>
   <style>
-    body, html {
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      height: 100%;
+      width: 100%;
       font-family: 'Courier New', Courier, monospace;
       color: white;
-      text-align: center;
-      background: black;
+      background-color: black;
+      overflow: hidden;
     }
+
     video {
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       object-fit: cover;
       z-index: -1;
     }
+
     .content {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 16px;
     }
+
+    h1, h2 {
+      margin: 10px 0;
+    }
+
     .clickable {
       cursor: pointer;
       text-decoration: underline;
+      font-weight: bold;
     }
+
     #finalTitle, #buyButton {
       display: none;
       margin-top: 30px;
     }
+
     #buyButton {
       padding: 12px 24px;
       background-color: #f06292;
@@ -44,18 +62,22 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 18px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
+  <!-- Background Video -->
   <video autoplay muted loop id="bgVideo">
-    <source src="https://drive.google.com/uc?export=download&id=13koYqimDGZDmZt3-lq9XIqovzzRmjzXF" type="video/mp4">
+    <source src="background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <audio id="bgMusic" src="https://drive.google.com/uc?export=download&id=1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW"></audio>
+  <!-- Background Music -->
+  <audio id="bgMusic" src="music.mp3"></audio>
 
+  <!-- Main Content -->
   <div class="content">
     <h1>Famu's <span id="boxOptions">
       <span>Love</span> /
@@ -67,6 +89,7 @@
     <button id="buyButton" onclick="window.location.href='https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing'">Buy the Box</button>
   </div>
 
+  <!-- Script -->
   <script>
     const movieBox = document.getElementById('movieBox');
     const finalTitle = document.getElementById('finalTitle');
@@ -79,7 +102,7 @@
       setTimeout(() => {
         finalTitle.style.display = 'block';
         buyButton.style.display = 'inline-block';
-      }, 2000);
+      }, 1500);
     });
   </script>
 
