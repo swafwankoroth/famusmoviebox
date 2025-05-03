@@ -3,108 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Famu's ____ Box</title>
+  <title>Famu's Movie Ticket</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-      height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #333; /* Fallback background color */
-      background: url('https://drive.google.com/uc?export=view&id=13koYqimDGZDmZt3-lq9XIqovzzRmjzXF') no-repeat center center fixed;
-      background-size: cover;
+      height: 100vh;
     }
 
-    h1 {
-      font-size: 3em;
-      margin-bottom: 20px;
+    .ticket {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
+      max-width: 400px;
     }
 
-    #boxOptions {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .option {
-      padding: 20px;
-      background-color: rgba(255, 105, 135, 0.7);
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.5em;
-      color: white;
-      transition: background-color 0.3s;
-    }
-
-    .option:hover {
-      background-color: rgba(255, 105, 135, 1);
-    }
-
-    #finalTitle {
-      display: none;
-      font-size: 2em;
-      margin-top: 20px;
+    .ticket h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5em;
       color: #ff6f91;
     }
 
-    #buyButton {
-      display: none;
+    .ticket p {
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .buyButton {
       padding: 12px 24px;
       background-color: #ff6f91;
       color: white;
+      font-size: 1.2em;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
-      margin-top: 20px;
     }
 
-    #buyButton:hover {
+    .buyButton:hover {
       background-color: #ff3e6c;
     }
-
   </style>
 </head>
 <body>
 
-  <div>
-    <h1>Hi Baby, <br> Welcome to Famu's ____ Box</h1>
-
-    <div id="boxOptions">
-      <div class="option" id="movieBox">Movie</div>
-    </div>
-
-    <div id="finalTitle">
-      Famu's Movie Box
-    </div>
-
-    <a id="buyButton" href="ticket.html">Buy Famu's Movie Box</a>
-
-    <audio id="bgMusic" src="https://drive.google.com/uc?export=view&id=1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW" preload="auto"></audio>
+  <div class="ticket">
+    <h1>Famu's Movie Box</h1>
+    <p>Congratulations! You're one step away from unlocking the best movie collection.</p>
+    <a href="https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing" target="_blank" class="buyButton">Buy Now</a>
   </div>
-
-  <script>
-    const movieBox = document.getElementById('movieBox');
-    const finalTitle = document.getElementById('finalTitle');
-    const buyButton = document.getElementById('buyButton');
-    const bgMusic = document.getElementById('bgMusic');
-    const boxOptions = document.getElementById('boxOptions');
-
-    movieBox.addEventListener('click', () => {
-      bgMusic.play();
-      boxOptions.style.display = 'none';
-      setTimeout(() => {
-        finalTitle.style.display = 'block';
-        buyButton.style.display = 'inline-block';
-      }, 1500);
-    });
-  </script>
 
 </body>
 </html>
