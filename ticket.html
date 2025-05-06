@@ -355,7 +355,7 @@
     </div>
     
     <!-- Audio element for background music -->
-    <audio id="background-music" preload="auto">
+    <audio id="background-music" preload="auto" autoplay loop>
         <source src="Before Midnight - Graham Reynolds.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -375,7 +375,7 @@
         const buyButton = document.getElementById('buy-button');
         
         // Initialize music state
-        let isMusicPlaying = false;
+        let isMusicPlaying = true; // Start as true since we want autoplay
         backgroundMusic.volume = 0.5; // Set volume to 50%
         
         // Function to handle music toggle
@@ -395,17 +395,34 @@
         // Add event listener to music toggle button
         musicToggle.addEventListener('click', toggleMusic);
         
-        // Try to play music on page interaction (to bypass autoplay restrictions)
-        document.addEventListener('click', function() {
-            if (!isMusicPlaying) {
-                backgroundMusic.play().then(() => {
-                    isMusicPlaying = true;
-                    musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-                }).catch(e => {
-                    console.error('Music play error:', e);
-                });
+        // Try multiple approaches to autoplay music
+        window.addEventListener('DOMContentLoaded', function() {
+            // Try to play immediately
+            playMusic();
+            
+            // Backup: try again after a short delay
+            setTimeout(playMusic, 1000);
+        });
+        
+        // Handle user interaction as backup for browsers with strict autoplay policies
+        document.addEventListener('click', playMusic, { once: true });
+        
+        // Function to attempt playing music
+        function playMusic() {
+            if (!backgroundMusic.paused) {
+                // Music is already playing
+                return;
             }
-        }, { once: true });
+            
+            backgroundMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                console.log('Music started successfully');
+            }).catch(e => {
+                console.warn('Autoplay was prevented. User interaction required.', e);
+                // We'll wait for user click which will trigger this function again
+            });
+        }
         
         // Buy button click event
         buyButton.addEventListener('click', function() {
