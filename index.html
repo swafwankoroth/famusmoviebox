@@ -222,6 +222,9 @@
     <script>
         // Make only the movie option clickable
         document.getElementById('movie-option').addEventListener('click', function() {
+            // Store a flag in localStorage to indicate we should play music on the ticket page
+            localStorage.setItem('playMusic', 'true');
+            
             // Just redirect to ticket page with animation, don't play music here
             this.style.transform = 'scale(1.1)';
             setTimeout(() => {
@@ -232,13 +235,20 @@
         // Handle video loading and make sure it plays
         const videoBackground = document.getElementById('video-background');
         
-        // Ensure video plays and handle errors
-        videoBackground.addEventListener('loadeddata', function() {
+        // Force video to play muted (this has better browser support)
+        function playVideo() {
+            videoBackground.muted = true; // Make sure it's muted
             videoBackground.play().catch(error => {
                 console.log('Video autoplay failed:', error);
                 // Fallback to background color is already set in CSS
             });
-        });
+        }
+        
+        // Attempt to play video once it's loaded
+        videoBackground.addEventListener('loadeddata', playVideo);
+        
+        // Also try playing on page load
+        window.addEventListener('load', playVideo);
         
         // Handle video loading errors gracefully
         videoBackground.addEventListener('error', function() {
