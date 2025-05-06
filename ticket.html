@@ -297,7 +297,7 @@
     </div>
     
     <!-- Background music that plays automatically when page loads -->
-    <audio id="background-music" loop>
+    <audio id="background-music" preload="auto" loop>
         <source src="Before Midnight - Graham Reynolds.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -306,36 +306,64 @@
         // Play background music when the page loads
         const backgroundMusic = document.getElementById('background-music');
         
-        // We need to use a user interaction to start the music
-        // Modern browsers require user interaction to play audio
-        window.addEventListener('DOMContentLoaded', function() {
-            // Try to play music immediately (may fail due to browser policies)
-            playBackgroundMusic();
-            
-            // Also make the first click anywhere on the page play the music
-            document.body.addEventListener('click', function() {
-                playBackgroundMusic();
-            }, { once: true }); // only trigger once
-        });
-        
+        // Check if we came from the movie option click
         function playBackgroundMusic() {
+            // Set volume before playing
             backgroundMusic.volume = 0.5; // Set volume to 50%
-            backgroundMusic.play().catch(error => {
-                console.log('Audio autoplay failed:', error);
-                // We'll try again on first user interaction
-            });
+            
+            // Try playing the music - modern browsers require user interaction
+            const playPromise = backgroundMusic.play();
+            
+            // Handle play promise
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Audio autoplay failed, will try again on interaction:', error);
+                    // Set up a one-time click event to play music
+                    document.addEventListener('click', function() {
+                        backgroundMusic.play();
+                    }, { once: true });
+                });
+            }
         }
+        
+        // Different approaches to ensure music plays
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we arrived from clicking the movie button
+            if (localStorage.getItem('playMusic') === 'true') {
+                // Clear the flag
+                localStorage.removeItem('playMusic');
+                
+                // Multiple attempts to play the music
+                setTimeout(playBackgroundMusic, 500);
+                setTimeout(playBackgroundMusic, 1000);
+                setTimeout(playBackgroundMusic, 2000);
+            }
+            
+            // Add click handler to ensure music plays on first interaction
+            document.addEventListener('click', function() {
+                backgroundMusic.play();
+            }, { once: true });
+        });
         
         // Handle video background to make sure it plays
         const videoBackground = document.getElementById('video-background');
         
-        // Ensure video plays and handle errors
-        videoBackground.addEventListener('loadeddata', function() {
+        // Force video to play muted (this has better browser support)
+        function playVideo() {
+            videoBackground.muted = true; // Make sure it's muted
             videoBackground.play().catch(error => {
                 console.log('Video autoplay failed:', error);
                 // Fallback to background color is already set in CSS
             });
-        });
+        }
+        
+        // Multiple attempts to ensure video plays
+        videoBackground.addEventListener('loadeddata', playVideo);
+        window.addEventListener('load', playVideo);
+        document.addEventListener('DOMContentLoaded', playVideo);
+        
+        // Try playing again after a short delay
+        setTimeout(playVideo, 1000);
         
         // Handle video loading errors gracefully
         videoBackground.addEventListener('error', function() {
