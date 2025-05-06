@@ -21,7 +21,6 @@
             align-items: center;
             color: white;
             position: relative;
-            background-color: #1a1a2e; /* Fallback background color */
         }
         
         #video-background {
@@ -219,41 +218,32 @@
         Made with <span class="heart">♥</span> for you
     </div>
     
+    <audio id="background-music" loop>
+        <source src="Before Midnight - Graham Reynolds.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    
     <script>
         // Make only the movie option clickable
         document.getElementById('movie-option').addEventListener('click', function() {
-            // Store a flag in localStorage to indicate we should play music on the ticket page
-            localStorage.setItem('playMusic', 'true');
+            // Play background music when Movie is clicked
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.play();
             
-            // Just redirect to ticket page with animation, don't play music here
+            // Redirect to ticket page with animation
             this.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 window.location.href = 'ticket.html';
             }, 500);
         });
         
-        // Handle video loading and make sure it plays
+        // Use real video if you have one
+        // For now, this is a placeholder where you would put your real video URL
         const videoBackground = document.getElementById('video-background');
-        
-        // Force video to play muted (this has better browser support)
-        function playVideo() {
-            videoBackground.muted = true; // Make sure it's muted
-            videoBackground.play().catch(error => {
-                console.log('Video autoplay failed:', error);
-                // Fallback to background color is already set in CSS
-            });
-        }
-        
-        // Attempt to play video once it's loaded
-        videoBackground.addEventListener('loadeddata', playVideo);
-        
-        // Also try playing on page load
-        window.addEventListener('load', playVideo);
         
         // Handle video loading errors gracefully
         videoBackground.addEventListener('error', function() {
-            console.log('Video failed to load');
-            // Fallback background color is already set in CSS
+            document.body.style.backgroundColor = '#1a1a2e';
         });
     </script>
 </body>
