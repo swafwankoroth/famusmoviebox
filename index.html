@@ -63,8 +63,8 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            color: #ffcccb;
-            text-shadow: 0 0 10px rgba(255, 100, 100, 0.5);
+            color: #b30000;
+            text-shadow: 0 0 10px rgba(179, 0, 0, 0.5);
         }
         
         .welcome-text {
@@ -121,9 +121,9 @@
         }
         
         .option.active {
-            background-color: rgba(255, 120, 120, 0.3);
+            background-color: rgba(179, 0, 0, 0.3);
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+            box-shadow: 0 0 20px rgba(179, 0, 0, 0.5);
         }
         
         .option-label {
@@ -132,7 +132,7 @@
         }
         
         .heart {
-            color: #ff6b6b;
+            color: #b30000;
             display: inline-block;
             animation: pulse 1.5s infinite;
         }
@@ -154,6 +154,33 @@
         .fa-music { color: #64b5f6; }
         .fa-utensils { color: #81c784; }
         .fa-film { color: #ffb74d; }
+        
+        /* Media controls */
+        .media-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .media-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .media-btn:hover {
+            opacity: 1;
+        }
         
         /* Responsive design */
         @media (max-width: 768px) {
@@ -218,28 +245,80 @@
         Made with <span class="heart">♥</span> for you
     </div>
     
-    <audio id="background-music" loop>
-        <source src="Before Midnight - Graham Reynolds.mp3" type="audio/mp3">
+    <!-- Media controls -->
+    <div class="media-controls">
+        <button id="music-toggle" class="media-btn">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+    
+    <audio id="background-music" preload="auto" autoplay loop>
+        <source src="Lizzy McAlpine - ceilings (Official Audio).mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
     
     <script>
+        // DOM elements
+        const backgroundMusic = document.getElementById('background-music');
+        const musicToggle = document.getElementById('music-toggle');
+        const videoBackground = document.getElementById('video-background');
+        
+        // Initialize music state
+        let isMusicPlaying = true; // Start as true since we want autoplay
+        backgroundMusic.volume = 0.5; // Set volume to 50%
+        
+        // Function to handle music toggle
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                backgroundMusic.play().catch(e => {
+                    console.error('Music play error:', e);
+                });
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        // Add event listener to music toggle button
+        musicToggle.addEventListener('click', toggleMusic);
+        
+        // Try multiple approaches to autoplay music
+        window.addEventListener('DOMContentLoaded', function() {
+            // Try to play immediately
+            playMusic();
+            
+            // Backup: try again after a short delay
+            setTimeout(playMusic, 1000);
+        });
+        
+        // Function to attempt playing music
+        function playMusic() {
+            if (!backgroundMusic.paused) {
+                // Music is already playing
+                return;
+            }
+            
+            backgroundMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                console.log('Music started successfully');
+            }).catch(e => {
+                console.warn('Autoplay was prevented. User interaction required.', e);
+                // We'll wait for user click which will trigger this function again via document event listener
+                document.addEventListener('click', playMusic, { once: true });
+            });
+        }
+        
         // Make only the movie option clickable
         document.getElementById('movie-option').addEventListener('click', function() {
-            // Play background music when Movie is clicked
-            const backgroundMusic = document.getElementById('background-music');
-            backgroundMusic.play();
-            
             // Redirect to ticket page with animation
             this.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 window.location.href = 'ticket.html';
             }, 500);
         });
-        
-        // Use real video if you have one
-        // For now, this is a placeholder where you would put your real video URL
-        const videoBackground = document.getElementById('video-background');
         
         // Handle video loading errors gracefully
         videoBackground.addEventListener('error', function() {
