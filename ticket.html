@@ -21,6 +21,7 @@
             align-items: center;
             color: white;
             position: relative;
+            background-color: #1a1a2e; /* Fallback background color */
         }
         
         #video-background {
@@ -214,6 +215,33 @@
             100% { left: 200%; }
         }
         
+        /* Media controls */
+        .media-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .media-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .media-btn:hover {
+            opacity: 1;
+        }
+        
         /* Responsive design */
         @media (max-width: 768px) {
             .ticket-container {
@@ -236,8 +264,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <video id="video-background" autoplay muted loop>
-        <source src="13koYqimDGZDmZt3-lq9XIqovzzRmjzXF.mp4" type="video/mp4">
+    <!-- Using a poster attribute for better user experience while video loads -->
+    <video id="video-background" autoplay muted loop poster="/api/placeholder/1920/1080">
+        <source src="movie_background.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     
@@ -282,38 +311,38 @@
             
             <div class="ticket-barcode">
                 <svg width="100%" height="80" viewBox="0 0 400 80">
-                    <rect x="10" y="10" width="8" height="60" fill="black"/>
-                    <rect x="25" y="10" width="2" height="60" fill="black"/>
-                    <rect x="35" y="10" width="4" height="60" fill="black"/>
-                    <rect x="45" y="10" width="6" height="60" fill="black"/>
-                    <rect x="60" y="10" width="4" height="60" fill="black"/>
-                    <rect x="70" y="10" width="8" height="60" fill="black"/>
-                    <rect x="85" y="10" width="2" height="60" fill="black"/>
-                    <rect x="95" y="10" width="6" height="60" fill="black"/>
-                    <rect x="105" y="10" width="4" height="60" fill="black"/>
-                    <rect x="115" y="10" width="2" height="60" fill="black"/>
-                    <rect x="125" y="10" width="8" height="60" fill="black"/>
-                    <rect x="140" y="10" width="4" height="60" fill="black"/>
-                    <rect x="150" y="10" width="6" height="60" fill="black"/>
-                    <rect x="165" y="10" width="2" height="60" fill="black"/>
-                    <rect x="175" y="10" width="4" height="60" fill="black"/>
-                    <rect x="185" y="10" width="8" height="60" fill="black"/>
-                    <rect x="200" y="10" width="2" height="60" fill="black"/>
-                    <rect x="210" y="10" width="6" height="60" fill="black"/>
-                    <rect x="225" y="10" width="4" height="60" fill="black"/>
-                    <rect x="235" y="10" width="2" height="60" fill="black"/>
-                    <rect x="245" y="10" width="8" height="60" fill="black"/>
-                    <rect x="260" y="10" width="4" height="60" fill="black"/>
-                    <rect x="270" y="10" width="6" height="60" fill="black"/>
-                    <rect x="285" y="10" width="2" height="60" fill="black"/>
-                    <rect x="295" y="10" width="4" height="60" fill="black"/>
-                    <rect x="305" y="10" width="8" height="60" fill="black"/>
-                    <rect x="320" y="10" width="2" height="60" fill="black"/>
-                    <rect x="330" y="10" width="6" height="60" fill="black"/>
-                    <rect x="345" y="10" width="4" height="60" fill="black"/>
-                    <rect x="355" y="10" width="8" height="60" fill="black"/>
-                    <rect x="370" y="10" width="2" height="60" fill="black"/>
-                    <rect x="380" y="10" width="6" height="60" fill="black"/>
+                    <rect x="10" y="10" width="8" height="60" fill="white"/>
+                    <rect x="25" y="10" width="2" height="60" fill="white"/>
+                    <rect x="35" y="10" width="4" height="60" fill="white"/>
+                    <rect x="45" y="10" width="6" height="60" fill="white"/>
+                    <rect x="60" y="10" width="4" height="60" fill="white"/>
+                    <rect x="70" y="10" width="8" height="60" fill="white"/>
+                    <rect x="85" y="10" width="2" height="60" fill="white"/>
+                    <rect x="95" y="10" width="6" height="60" fill="white"/>
+                    <rect x="105" y="10" width="4" height="60" fill="white"/>
+                    <rect x="115" y="10" width="2" height="60" fill="white"/>
+                    <rect x="125" y="10" width="8" height="60" fill="white"/>
+                    <rect x="140" y="10" width="4" height="60" fill="white"/>
+                    <rect x="150" y="10" width="6" height="60" fill="white"/>
+                    <rect x="165" y="10" width="2" height="60" fill="white"/>
+                    <rect x="175" y="10" width="4" height="60" fill="white"/>
+                    <rect x="185" y="10" width="8" height="60" fill="white"/>
+                    <rect x="200" y="10" width="2" height="60" fill="white"/>
+                    <rect x="210" y="10" width="6" height="60" fill="white"/>
+                    <rect x="225" y="10" width="4" height="60" fill="white"/>
+                    <rect x="235" y="10" width="2" height="60" fill="white"/>
+                    <rect x="245" y="10" width="8" height="60" fill="white"/>
+                    <rect x="260" y="10" width="4" height="60" fill="white"/>
+                    <rect x="270" y="10" width="6" height="60" fill="white"/>
+                    <rect x="285" y="10" width="2" height="60" fill="white"/>
+                    <rect x="295" y="10" width="4" height="60" fill="white"/>
+                    <rect x="305" y="10" width="8" height="60" fill="white"/>
+                    <rect x="320" y="10" width="2" height="60" fill="white"/>
+                    <rect x="330" y="10" width="6" height="60" fill="white"/>
+                    <rect x="345" y="10" width="4" height="60" fill="white"/>
+                    <rect x="355" y="10" width="8" height="60" fill="white"/>
+                    <rect x="370" y="10" width="2" height="60" fill="white"/>
+                    <rect x="380" y="10" width="6" height="60" fill="white"/>
                 </svg>
             </div>
         </div>
@@ -325,26 +354,61 @@
         </div>
     </div>
     
-    <audio id="background-music" loop>
-        <source src="1eBS-JI5QAC6Dwu9id_FoICVjvxP1VbeW.mp3" type="audio/mp3">
+    <!-- Audio element for background music -->
+    <audio id="background-music" preload="auto">
+        <source src="background_music.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
     
+    <!-- Media controls -->
+    <div class="media-controls">
+        <button id="music-toggle" class="media-btn">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+    
     <script>
-        // Play background music when page loads
-        window.addEventListener('DOMContentLoaded', function() {
-            const backgroundMusic = document.getElementById('background-music');
-            backgroundMusic.volume = 0.5; // Set volume to 50%
-            backgroundMusic.play().catch(e => {
-                console.log('Auto-play was prevented. Click anywhere to play music.');
-                document.body.addEventListener('click', () => {
-                    backgroundMusic.play();
-                }, { once: true });
-            });
-        });
+        // DOM elements
+        const backgroundMusic = document.getElementById('background-music');
+        const musicToggle = document.getElementById('music-toggle');
+        const videoBackground = document.getElementById('video-background');
+        const buyButton = document.getElementById('buy-button');
+        
+        // Initialize music state
+        let isMusicPlaying = false;
+        backgroundMusic.volume = 0.5; // Set volume to 50%
+        
+        // Function to handle music toggle
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                backgroundMusic.play().catch(e => {
+                    console.error('Music play error:', e);
+                });
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        // Add event listener to music toggle button
+        musicToggle.addEventListener('click', toggleMusic);
+        
+        // Try to play music on page interaction (to bypass autoplay restrictions)
+        document.addEventListener('click', function() {
+            if (!isMusicPlaying) {
+                backgroundMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }).catch(e => {
+                    console.error('Music play error:', e);
+                });
+            }
+        }, { once: true });
         
         // Buy button click event
-        document.getElementById('buy-button').addEventListener('click', function() {
+        buyButton.addEventListener('click', function() {
             // Your Google Drive link 
             const googleDriveLink = "https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing";
             
@@ -358,14 +422,23 @@
             }, 1000);
         });
         
-        // Use real video if you have one
-        // For now, this is a placeholder where you would put your real video URL
-        const videoBackground = document.getElementById('video-background');
-        
         // Handle video loading errors gracefully
-        videoBackground.addEventListener('error', function() {
+        videoBackground.addEventListener('error', function(e) {
+            console.error('Video error:', e);
             document.body.style.backgroundColor = '#1a1a2e';
         });
+        
+        // Log when video is playing
+        videoBackground.addEventListener('playing', function() {
+            console.log('Video is playing');
+        });
+        
+        // Check if video is loaded
+        if (videoBackground.readyState >= 3) {
+            console.log('Video is loaded');
+        } else {
+            console.log('Video is not fully loaded yet');
+        }
     </script>
 </body>
 </html>
