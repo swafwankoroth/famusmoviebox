@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Ticket</title>
+    <title>Movie Ticket - Famu's Box</title>
     <style>
         * {
             margin: 0;
@@ -21,17 +21,30 @@
             align-items: center;
             color: white;
             position: relative;
-            background-color: #1a1a2e; /* Fallback background color */
+            background-color: #0a0a14; /* Fallback color if video doesn't load */
         }
         
-        #video-background {
+        .video-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            overflow: hidden;
             z-index: -2;
+        }
+        
+        #video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -2;
+            object-fit: cover;
         }
         
         .overlay {
@@ -44,331 +57,299 @@
             z-index: -1;
         }
         
-        .container {
-            text-align: center;
-            max-width: 800px;
-            padding: 2rem;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            animation: fadeIn 1.5s ease-in-out;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+        .ticket-container {
+            position: relative;
+            width: 85%;
+            max-width: 600px;
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #ffcccb;
-            text-shadow: 0 0 10px rgba(255, 100, 100, 0.5);
-        }
-        
-        .ticket {
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px dashed rgba(255, 255, 255, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .ticket::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 10%;
-            width: 80%;
-            height: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            filter: blur(5px);
-            z-index: -1;
-        }
-        
-        .ticket::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 10%;
-            width: 80%;
-            height: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            filter: blur(5px);
-            z-index: -1;
-        }
-        
         .ticket-header {
-            margin-bottom: 1.5rem;
-            width: 100%;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
-            padding-bottom: 1rem;
+            background: linear-gradient(135deg, #ff6b6b, #c44569);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .ticket-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.2) 10px,
+                rgba(0, 0, 0, 0.3) 10px,
+                rgba(0, 0, 0, 0.3) 20px
+            );
         }
         
         .ticket-title {
             font-size: 2rem;
             font-weight: 700;
-            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ticket-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .ticket-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .ticket-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .info-item {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            opacity: 0.7;
             margin-bottom: 0.5rem;
         }
         
-        .ticket-date {
-            font-size: 1.2rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .ticket-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            width: 100%;
-            margin-bottom: 1.5rem;
-        }
-        
-        .ticket-detail {
-            text-align: left;
-        }
-        
-        .ticket-label {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 0.3rem;
-        }
-        
-        .ticket-value {
-            font-size: 1.2rem;
+        .info-value {
+            font-size: 1.1rem;
             font-weight: 600;
         }
         
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0.5rem 0;
+        }
+        
         .ticket-footer {
-            margin-top: 1rem;
-            width: 100%;
-            border-top: 1px dashed rgba(255, 255, 255, 0.3);
-            padding-top: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 1.5rem 2rem;
+            text-align: center;
         }
         
-        .barcode {
-            font-family: 'Libre Barcode 39', cursive;
-            font-size: 2.5rem;
-            letter-spacing: -1px;
-        }
-        
-        .movie-poster {
-            width: 100%;
-            max-width: 250px;
-            height: auto;
-            border-radius: 10px;
-            margin: 1rem 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .button {
-            background-color: rgba(255, 120, 120, 0.3);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5rem;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .button:hover {
-            background-color: rgba(255, 120, 120, 0.5);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 100, 100, 0.3);
-        }
-        
-        .heart {
-            color: #ff6b6b;
+        .buy-btn {
             display: inline-block;
-            animation: pulse 1.5s infinite;
+            background: linear-gradient(135deg, #ff6b6b, #c44569);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(196, 69, 105, 0.4);
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(196, 69, 105, 0.5);
         }
         
-        .footer {
+        .buy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .back-link {
             position: absolute;
-            bottom: 20px;
-            font-size: 0.9rem;
-            opacity: 0.7;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+        }
+        
+        .back-icon {
+            margin-right: 0.5rem;
+        }
+        
+        .ticket-barcode {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .barcode-img {
+            max-width: 80%;
+            opacity: 0.8;
+        }
+        
+        /* Special ticket effects */
+        .ticket-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
         }
         
         /* Responsive design */
         @media (max-width: 768px) {
-            .container {
-                width: 90%;
-                padding: 1.5rem;
-            }
-            
-            h1 {
-                font-size: 2.5rem;
+            .ticket-container {
+                width: 95%;
             }
             
             .ticket-title {
-                font-size: 1.5rem;
+                font-size: 1.7rem;
             }
             
-            .ticket-content {
-                grid-template-columns: 1fr;
+            .ticket-body {
+                padding: 1.5rem;
+            }
+            
+            .info-item {
+                min-width: 100px;
             }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Video background -->
-    <video id="video-background" autoplay muted loop>
-        <source src="Background.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video-container">
+        <video id="video-background" autoplay muted loop>
+            <source src="Background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
     
     <div class="overlay"></div>
     
-    <div class="container">
-        <h1>Your Movie Ticket <span class="heart">♥</span></h1>
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left back-icon"></i> Back
+    </a>
+    
+    <div class="ticket-container">
+        <div class="ticket-shimmer"></div>
         
-        <div class="ticket">
-            <div class="ticket-header">
-                <div class="ticket-title">Special Movie Night</div>
-                <div class="ticket-date">Date: May 10, 2025</div>
-            </div>
-            
-            <img src="/api/placeholder/250/375" alt="Movie Poster" class="movie-poster">
-            
-            <div class="ticket-content">
-                <div class="ticket-detail">
-                    <div class="ticket-label">Movie:</div>
-                    <div class="ticket-value">Before Sunset</div>
+        <div class="ticket-header">
+            <h1 class="ticket-title">Special Movie Night</h1>
+            <p class="ticket-subtitle">A perfect evening just for you</p>
+        </div>
+        
+        <div class="ticket-body">
+            <div class="ticket-info">
+                <div class="info-item">
+                    <div class="info-label">Date</div>
+                    <div class="info-value">Today</div>
                 </div>
                 
-                <div class="ticket-detail">
-                    <div class="ticket-label">Time:</div>
-                    <div class="ticket-value">8:00 PM</div>
+                <div class="info-item">
+                    <div class="info-label">Time</div>
+                    <div class="info-value">Any time</div>
                 </div>
                 
-                <div class="ticket-detail">
-                    <div class="ticket-label">Seats:</div>
-                    <div class="ticket-value">Special Couch</div>
-                </div>
-                
-                <div class="ticket-detail">
-                    <div class="ticket-label">Venue:</div>
-                    <div class="ticket-value">Home Theater</div>
+                <div class="info-item">
+                    <div class="info-label">Seat</div>
+                    <div class="info-value">VIP</div>
                 </div>
             </div>
             
-            <div class="ticket-footer">
-                <div class="barcode">FAMUSLOVE</div>
-                <div class="ticket-note">VIP Access</div>
+            <div class="divider"></div>
+            
+            <div>
+                <div class="info-label">Special Note</div>
+                <div class="info-value">Get comfy and enjoy our special movie night together ♥</div>
+            </div>
+            
+            <div class="ticket-barcode">
+                <img src="/api/placeholder/400/70" alt="Barcode" class="barcode-img">
             </div>
         </div>
         
-        <button class="button" onclick="window.location.href='index.html'">
-            <i class="fas fa-arrow-left"></i> Back to Box
-        </button>
+        <div class="ticket-footer">
+            <button id="buy-button" class="buy-btn">
+                <i class="fas fa-ticket-alt"></i> Buy Now
+            </button>
+        </div>
     </div>
     
-    <div class="footer">
-        Made with <span class="heart">♥</span> for you
-    </div>
-    
-    <!-- Background music that plays automatically when page loads -->
-    <audio id="background-music" preload="auto" loop>
+    <audio id="background-music" loop>
         <source src="Before Midnight - Graham Reynolds.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
     
     <script>
-        // Play background music when the page loads
-        const backgroundMusic = document.getElementById('background-music');
-        
-        // Check if we came from the movie option click
-        function playBackgroundMusic() {
-            // Set volume before playing
+        // Play background music when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            const backgroundMusic = document.getElementById('background-music');
             backgroundMusic.volume = 0.5; // Set volume to 50%
             
-            // Try playing the music - modern browsers require user interaction
-            const playPromise = backgroundMusic.play();
-            
-            // Handle play promise
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log('Audio autoplay failed, will try again on interaction:', error);
-                    // Set up a one-time click event to play music
-                    document.addEventListener('click', function() {
-                        backgroundMusic.play();
-                    }, { once: true });
-                });
-            }
-        }
-        
-        // Different approaches to ensure music plays
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if we arrived from clicking the movie button
-            if (localStorage.getItem('playMusic') === 'true') {
-                // Clear the flag
-                localStorage.removeItem('playMusic');
-                
-                // Multiple attempts to play the music
-                setTimeout(playBackgroundMusic, 500);
-                setTimeout(playBackgroundMusic, 1000);
-                setTimeout(playBackgroundMusic, 2000);
-            }
-            
-            // Add click handler to ensure music plays on first interaction
-            document.addEventListener('click', function() {
-                backgroundMusic.play();
-            }, { once: true });
+            // Try to play music - handle autoplay restrictions
+            backgroundMusic.play().catch(function(e) {
+                console.log('Audio playback was prevented by the browser. Click anywhere to play.');
+                // Add a click event to the whole document to play on first interaction
+                document.body.addEventListener('click', function() {
+                    backgroundMusic.play();
+                }, { once: true });
+            });
         });
         
-        // Handle video background to make sure it plays
+        // Buy button click event
+        document.getElementById('buy-button').addEventListener('click', function() {
+            // Your Google Drive link 
+            const googleDriveLink = "https://drive.google.com/drive/folders/1RZFr2Hj_vPlEoBv9ExH5imQRnwtccyFv?usp=sharing";
+            
+            // Button animation
+            this.innerHTML = '<i class="fas fa-check"></i> Enjoy!';
+            this.style.background = 'linear-gradient(135deg, #20bf6b, #0b8a5c)';
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = googleDriveLink;
+            }, 1000);
+        });
+        
+        // Alternative: Try loading the video from a different source if Google Drive fails
         const videoBackground = document.getElementById('video-background');
-        
-        // Force video to play muted (this has better browser support)
-        function playVideo() {
-            videoBackground.muted = true; // Make sure it's muted
-            videoBackground.play().catch(error => {
-                console.log('Video autoplay failed:', error);
-                // Fallback to background color is already set in CSS
-            });
-        }
-        
-        // Multiple attempts to ensure video plays
-        videoBackground.addEventListener('loadeddata', playVideo);
-        window.addEventListener('load', playVideo);
-        document.addEventListener('DOMContentLoaded', playVideo);
-        
-        // Try playing again after a short delay
-        setTimeout(playVideo, 1000);
-        
-        // Handle video loading errors gracefully
         videoBackground.addEventListener('error', function() {
-            console.log('Video failed to load');
-            // Fallback background color is already set in CSS
+            console.error('Video failed to load. Applying fallback background.');
+            document.body.style.backgroundColor = '#1a1a2e';
+            // You could also set a different video source here if needed
         });
     </script>
 </body>
